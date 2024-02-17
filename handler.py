@@ -7,11 +7,7 @@ import asyncio
 model_name = os.getenv("MODEL", "mistralai/Mistral-7B-Instruct-v0.1")
 concurrency_modifier = int(os.getenv("CONCURRENCY_MODIFIER", 1))
 mode_to_run = os.getenv("MODE_TO_RUN", "pod")
-max_model_len = os.getenv("MAX_MODEL_LEN", 25000)
-
-# Adjust the max_model_len parameter as needed
-max_model_len = max_model_len
-
+max_model_len = int(os.getenv("MAX_MODEL_LEN", 25000))
 
 llm = openllm.LLM(model_name, backend="vllm", max_model_len=max_model_len)
 
