@@ -10,11 +10,14 @@ ENV MODEL=$MODEL_ARG
 # pod is for GPU pod on runpod, serverless is for serverless deployment on runpod
 # both is mainly for serverless deployment on runpod, but it also starts up a jupyter notebook and openssh
 # for debugging if you set the minimum active worker to one.
-ARG MODE_TO_RUN=gpu
+ARG MODE_TO_RUN=pod
 ENV MODE_TO_RUN=$MODE_TO_RUN
 
 ARG CONCURRENCY_MODIFIER=1
 ENV CONCURRENCY_MODIFIER=$CONCURRENCY_MODIFIER
+
+ARG MAX_MODEL_LEN=25000
+ENV MAX_MODEL_LEN=$max_model_len
 
 
 # Set up the working directory
@@ -57,6 +60,9 @@ ENV PATH="/app/venv/bin:$PATH"
 # Install Python packages in a single RUN instruction
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir \
+    OhMyRunPod \
+    asyncio \
+    requests \
     runpod==1.6.2 \
     langchain==0.0.259 \
     "openllm[vllm]"

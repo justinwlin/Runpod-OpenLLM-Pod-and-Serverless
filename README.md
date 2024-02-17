@@ -13,31 +13,292 @@ Below is a table of the environment variables that can be passed to the Docker c
 | `MODE_TO_RUN`          | Determines the container's operational mode, affecting the execution of `handler.py` and the initiation of services.         | `serverless`, `pod`, `both` | None                            |
 | `MODEL`                | Identifier for the OpenLLM model to be used. Specifies which AI model your applications will utilize.                        | Model Identifier (string)   | None                            |
 | `CONCURRENCY_MODIFIER` | A factor used to adjust the concurrency level for handling requests, allowing for tuning based on workload.                  | Integer                     | `1`                             |
+| `MAX_MODEL_LEN`        | Sets the maximum sequence length the model can handle, impacting memory usage and processing capabilities.                   | Integer                     | `25000` (can be adjusted)       |
 
 ### Note on Model Identifiers
 
 To find specific model identifiers for use with OpenLLM, visit the [OpenLLM GitHub repository](https://github.com/bentoml/OpenLLM). This resource offers a comprehensive list of available models and their identifiers, which can be utilized to set the `MODEL` environment variable.
 
+### Note on `MAX_MODEL_LEN`
+
+The `MAX_MODEL_LEN` environment variable defines the maximum number of tokens (sequence length) that the model can process in a single operation. This setting is crucial for managing the balance between performance and the capabilities of the underlying hardware, especially in terms of GPU memory utilization. Adjusting this variable can help avoid errors related to exceeding the maximum Key-Value (KV) cache length. If you encounter an error suggesting that the model's sequence length is larger than the KV cache can support, consider adjusting the `MAX_MODEL_LEN` value downwards.
+
+An ex. error might look like:
+```
+The model's max seq len (32768) is larger than the maximum number of tokens that can be stored in KV cache (27296). Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
+```
+
 ### Mode Descriptions
 
 - `serverless`: Executes `handler.py` for serverless request handling, optimal for scalable, efficient deployments.
 - `pod`: Initiates essential services like OpenSSH and Jupyter Lab, bypassing `handler.py`, suitable for development or tasks requiring GPU resources.
-- `both`: Combines the functionalities of both modes by executing `handler.py` and initiating essential services, ideal for debugging serverless deployments with additional tool access b/c you can set a minimum active worker to 1 and then essentially just use jupyter notebook / ssh to debug the worker.
+- `both`: Combines the functionalities of both modes by executing `handler.py` and initiating essential services, ideal for debugging serverless deployments with additional tool access because you can set a minimum active worker to 1 and then essentially just use Jupyter Notebook / SSH to debug the worker.
 
 ## Getting Started
 
-1. **Build the Docker Image**: Create your image using the Dockerfile, optionally specifying the `MODEL` and `CONCURRENCY_MODIFIER` variables as needed.
+1. **Build the Docker Image**: Create your image using the Dockerfile, optionally specifying the `MODEL`, `CONCURRENCY_MODIFIER`, and `MAX_MODEL_LEN` variables as needed.
 
     ```sh
-    docker build --build-arg MODEL_ARG=<your_model_identifier> -t your_image_name .
+    docker build --build-arg MODEL_ARG=<your_model_identifier> --build-arg MAX_MODEL_LEN=<desired_max_length> -t your_image_name .
     ```
 
-2. **Run the Container**: Start your container with the desired `MODE_TO_RUN` and any other environment variables.
+2. **Run the Container**: Start your container with the desired `MODE_TO_RUN`, `MAX_MODEL_LEN`, and any other environment variables.
 
     ```sh
-    docker run -e MODE_TO_RUN=serverless -e CONCURRENCY_MODIFIER=2 your_image_name
+    docker run -e MODE_TO_RUN=serverless -e CONCURRENCY_MODIFIER=2 -e MAX_MODEL_LEN=25000 your_image_name
     ```
+
+    You can also just leave the Docker run **empty** and let the default run take over. And if you want to instead modify the ENV variables, just use Runpod's GUI where you can write the ENV variables there instead of in the **RUN** command if you are running on runpod. This can be helpful especially if you are for ex. debugging in GPU Pod, and then you want to just deploy on SERVERLESS by just changing the ENV variable when you are making a new template.
 
 3. **Accessing Services**: Depending on the chosen mode,
     - In `serverless` and `both`, interact with the deployed model through the specified handler.
     - In `pod` and `both`, access Jupyter Lab and SSH services as provided.
+
+### Using Depot
+
+For those using Depot to build and deploy containers, the command structure is slightly different. Here's how you can include the environment variables as build arguments with Depot:
+
+```bash
+depot build -t yourusername/serverlessllm:1.0 . \
+  --build-arg MODE_TO_RUN=serverless \
+  --build-arg MODEL=mistralai/Mistral-7B-Instruct-v0.1 \
+  --build-arg CONCURRENCY_MODIFIER=1 \
+  --build-arg MAX_MODEL_LEN=25000 \
+  --push --platform linux/amd64
+```
+
+### Using Docker CLI
+For traditional Docker builds, you can incorporate the environment variables into your build command like so:
+```bash
+docker build -t yourusername/serverlessllm:1.0 . \
+  --build-arg MODE_TO_RUN=serverless \
+  --build-arg MODEL=mistralai/Mistral-7B-Instruct-v0.1 \
+  --build-arg CONCURRENCY_MODIFIER=1 \
+  --build-arg MAX_MODEL_LEN=25000
+```
+
+
+## Supported Backends
+> The preload.py is specifically looking for backends with 'vllm' which is essentially an optimized version of the model. If you want to use a different backend, you will need to modify the preload function and handler.py as otherwise if not specified it will default to vllm usually. 
+
+Running:
+```
+openllm models
+```
+
+The relevant backends that support vllm you can find if it is said in the supported_backends list.
+
+```
+{
+  "baichuan": {
+    "architecture": "BaichuanForCausalLM",
+    "example_id": "baichuan-inc/baichuan2-7b-chat",
+    "supported_backends": [
+      "pt",
+      "vllm"
+    ],
+    "installation": "pip install \"openllm[baichuan]\"",
+    "items": []
+  },
+  "chatglm": {
+    "architecture": "ChatGLMModel",
+    "example_id": "thudm/chatglm2-6b-int4",
+    "supported_backends": [
+      "pt",
+      "vllm"
+    ],
+    "installation": "pip install \"openllm[chatglm]\"",
+    "items": []
+  },
+  "dolly_v2": {
+    "architecture": "GPTNeoXForCausalLM",
+    "example_id": "databricks/dolly-v2-3b",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install openllm",
+    "items": []
+  },
+  "falcon": {
+    "architecture": "FalconForCausalLM",
+    "example_id": "tiiuae/falcon-40b-instruct",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install \"openllm[falcon]\"",
+    "items": []
+  },
+  "flan_t5": {
+    "architecture": "T5ForConditionalGeneration",
+    "example_id": "google/flan-t5-large",
+    "supported_backends": [
+      "pt"
+    ],
+    "installation": "pip install openllm",
+    "items": []
+  },
+  "gpt_neox": {
+    "architecture": "GPTNeoXForCausalLM",
+    "example_id": "eleutherai/gpt-neox-20b",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install openllm",
+    "items": []
+  },
+  "llama": {
+    "architecture": "LlamaForCausalLM",
+    "example_id": "NousResearch/llama-2-70b-hf",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install openllm",
+    "items": []
+  },
+  "mistral": {
+    "architecture": "MistralForCausalLM",
+    "example_id": "mistralai/Mistral-7B-v0.1",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install openllm",
+    "items": [
+      "vllm-mistralai--mistral-7b-instruct-v0.1:9ab9e76e2b09f9f29ea2d56aa5bd139e4445c59e"
+    ]
+  },
+  "mixtral": {
+    "architecture": "MixtralForCausalLM",
+    "example_id": "mistralai/Mixtral-8x7B-v0.1",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install openllm",
+    "items": []
+  },
+  "mpt": {
+    "architecture": "MPTForCausalLM",
+    "example_id": "mosaicml/mpt-30b-chat",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install \"openllm[mpt]\"",
+    "items": []
+  },
+  "opt": {
+    "architecture": "OPTForCausalLM",
+    "example_id": "facebook/opt-1.3b",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install openllm",
+    "items": []
+  },
+  "phi": {
+    "architecture": "PhiForCausalLM",
+    "example_id": "microsoft/phi-1_5",
+    "supported_backends": [
+      "pt",
+      "vllm"
+    ],
+    "installation": "pip install openllm",
+    "items": []
+  },
+  "qwen": {
+    "architecture": "QWenLMHeadModel",
+    "example_id": "qwen/Qwen-14B-Chat",
+    "supported_backends": [
+      "pt",
+      "vllm"
+    ],
+    "installation": "pip install \"openllm[qwen]\"",
+    "items": []
+  },
+  "stablelm": {
+    "architecture": "GPTNeoXForCausalLM",
+    "example_id": "stabilityai/stablelm-base-alpha-3b",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install openllm",
+    "items": []
+  },
+  "starcoder": {
+    "architecture": "GPTBigCodeForCausalLM",
+    "example_id": "bigcode/starcoderbase",
+    "supported_backends": [
+      "pt",
+      "vllm",
+      "ctranslate"
+    ],
+    "installation": "pip install \"openllm[starcoder]\"",
+    "items": []
+  },
+  "yi": {
+    "architecture": "YiForCausalLM",
+    "example_id": "01-ai/Yi-34B",
+    "supported_backends": [
+      "pt",
+      "vllm"
+    ],
+    "installation": "pip install openllm",
+    "items": []
+  }
+}
+```
+
+# Serverless
+
+## Expected API Input and Output
+
+### Input Structure
+
+The API expects input provided as a JSON object with the following structure:
+
+```json
+{
+  "input": {
+    "prompt": "<user_prompt>",
+    "answerType": "<stream | normal>"
+  }
+}
+```
+
+## Output Structure
+Stream Mode ("stream"): The API yields multiple JSON objects, each containing a part of the generated text:
+
+```How to call streammode on runpod:```
+
+[Documentation on stream mode invocation:](https://docs.runpod.io/serverless/endpoints/invoke-jobs#stream-results)
+
+```
+{"text": "generated text part 1"}
+{"text": "generated text part 2"}
+...
+```
+
+Normal Mode ("normal"): The API returns a single JSON object with the complete generated text:
+
+[Invoking the API with /run](https://docs.runpod.io/serverless/endpoints/invoke-jobs#asynchronous-endpoints)
+```json
+{
+  "text": "generated text"
+}
+```
