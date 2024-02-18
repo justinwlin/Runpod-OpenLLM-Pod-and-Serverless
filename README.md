@@ -108,6 +108,9 @@ The methodology is:
 
 Click here to see the example code I wrote for 'normal' and 'stream' mode. [stream_client_side.py](./stream_client_side.py)
 
+### Notes:
+I purposely kept the API very simple. The prompt you can construct however you want, rather than separating out things like system / user prompts. You can just construct the prompt `f"{system_prompt} {user_prompt}"` and then send it to the API. The API will then generate the text based on the prompt and return the text. And if you disagree, you can easily modify the handler.py to act differently of for your use-case, especially if you want to change and add more properties such as temperature etc. But I wanted to keep it as simple as possible at first.
+
 ## Expected API Input and Output
 
 ### Input Structure
