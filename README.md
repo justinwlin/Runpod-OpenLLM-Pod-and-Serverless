@@ -10,10 +10,10 @@ Below is a table of the environment variables that can be passed to the Docker c
 
 | Variable               | Description                                                                                                                  | Expected Values              | Default Value                   |
 |------------------------|------------------------------------------------------------------------------------------------------------------------------|------------------------------|---------------------------------|
-| `MODE_TO_RUN`          | Determines the container's operational mode, affecting the execution of `handler.py` and the initiation of services.         | `serverless`, `pod`, `both` | None                            |
-| `MODEL`                | Identifier for the OpenLLM model to be used. Specifies which AI model your applications will utilize during **BUILD STEP OF THE DOCKERFILE**                        | Model Identifier (string)   | None                            |
+| `MODE_TO_RUN`          | Determines the container's operational mode, affecting the execution of `handler.py` and the initiation of services.         | `serverless`, `pod`, `both` | pod                            |
+| `MODEL`                | Identifier for the OpenLLM model to be used. Specifies which AI model your applications will utilize during **BUILD STEP OF THE DOCKERFILE**                        | Model Identifier (string)   | mistralai/Mistral-7B-Instruct-v0.1                            |
 | `CONCURRENCY_MODIFIER` | A factor used to adjust the concurrency level for handling requests, allowing for tuning based on workload.                  | Integer                     | `1`                             |
-| `MAX_MODEL_LEN`        | Sets the maximum sequence length the model can handle, impacting memory usage and processing capabilities.                   | Integer                     | `25000` (can be adjusted)       |
+| `MAX_MODEL_LEN`        | Sets the maximum sequence length the model can handle, impacting memory usage and processing capabilities.                   | Integer                     | `25000`       |
 
 ### Note on Model Identifiers
 
