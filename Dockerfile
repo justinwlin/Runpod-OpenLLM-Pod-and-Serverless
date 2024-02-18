@@ -3,7 +3,7 @@ FROM runpod/pytorch:2.0.1-py3.10-cuda11.8.0-devel-ubuntu22.04
 
 # Environment variables
 ENV PYTHONUNBUFFERED=1 
-ARG MODEL=mistralai/Mistral-7B-Instruct-v0.1  # Updated line
+ARG MODEL=mistralai/Mistral-7B-Instruct-v0.1
 ENV MODEL=$MODEL_ARG
 
 # Modes can be: pod, serverless, both
