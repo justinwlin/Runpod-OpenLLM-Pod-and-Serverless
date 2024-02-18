@@ -2,7 +2,7 @@
 
 ## Summary
 
-This Docker configuration utilizes OpenLLM for both GPU and Serverless deployments on Runpod. It employs an environment variable, `MODE_TO_RUN`, to dictate the startup behavior. Depending on the `MODE_TO_RUN` value, the configuration may launch `handler.py` for serverless operations or initiate OpenSSH and Jupyter Lab for GPU pods. This adaptable setup allows for straightforward modifications to meet various deployment requirements.
+This Docker configuration utilizes [OpenLLM](https://github.com/bentoml/OpenLLM) for both GPU and Serverless deployments on Runpod. It employs an environment variable, `MODE_TO_RUN`, to dictate the startup behavior. Depending on the `MODE_TO_RUN` value, the configuration may launch `handler.py` for serverless operations or initiate OpenSSH and Jupyter Lab for GPU pods. This adaptable setup allows for straightforward modifications to meet various deployment requirements.
 
 ## Environment Variables
 
