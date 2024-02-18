@@ -17,15 +17,6 @@ jobs:
           - repository: justinwlin/mistral7b_openllm
             model: mistralai/Mistral-7B-Instruct-v0.1
             tag: latest
-          - repository: justinwlin/mixtral_8x7b_openllm
-            model: mistralai/Mixtral-8x7B-v0.1
-            tag: latest
-          - repository: justinwlin/llama2_13b_openllm
-            model: NousResearch/llama-2-13b-hf
-            tag: latest
-          - repository: justinwlin/llama2_70b_openllm
-            model: NousResearch/llama-2-70b-hf
-            tag: latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
