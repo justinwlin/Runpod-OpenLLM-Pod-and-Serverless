@@ -53,6 +53,9 @@ The model's max seq len (32768) is larger than the maximum number of tokens that
 3. **Accessing Services**: Depending on the chosen mode,
     - In `serverless` and `both`, interact with the deployed model through the specified handler.
     - In `pod` and `both`, access Jupyter Lab and SSH services as provided.
+  
+### When using GPU Pod
+When using GPU Pod it often starts you up in /workspace. Just know you will need to go to '/app' is where I set the WORKDIR for all the files that come with the image. 
 
 ### Using Depot
 
