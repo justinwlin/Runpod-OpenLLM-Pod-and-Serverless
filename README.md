@@ -23,6 +23,8 @@ https://hub.docker.com/r/justinwlin/llama2_13b_openllm/tags
 
 If you use them make sure to always specify fully with the tag in Runpod `justinwlin/llama2_13b_openllm:latest`
 
+> Note! What this means is that if your model is on the CI/CD Pipeline you can use the Dockerfile_Iteration to use the base image, and just modify the handler.py to avoid redownloading the model during build time!
+
 ## Environment Variables
 
 Below is a table of the environment variables that can be passed to the Docker container. These variables enable customization of the deployment's behavior, offering flexibility for different scenarios.
@@ -128,6 +130,8 @@ The methodology is:
   -- If everything looks good, just use the same image for serverless and modify the env variable to change how it starts up
   -- If you need to iterate, iterate on Runpod and then copy and paste the handler.py back locally and then build using the Docker_Iteration file, which means you won't have to redownload the whole model again and instead just keep iterating on handler.py
 3. Once ready, then relaunch back on GPU Pod and Serverless until ready.
+
+> Note! If the base models are already built for you on my CI/CD pipeline, what that means is that you can just use the Dockerfile_Iteration file, to target that specific repository and just modify the handler.py. This way you can avoid the long wait time to "redownload the model" and just update the handler.py.
 
 # Serverless
 
