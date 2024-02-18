@@ -77,6 +77,59 @@ docker build -t yourusername/serverlessllm:1.0 . \
   --build-arg MAX_MODEL_LEN=25000
 ```
 
+# Developer Experience
+
+Start using the container with [GPU_POD](https://runpod.io/gsc?template=pu8uaqw765&ref=wqryvm1m
+) (This is my runpod public URL to the template all ready to go for you.)
+
+![alt text](GPU_POD.png)
+
+If you want to deploy on serverless it's super easy! Essentially copy the template but set the environment variable for the MODE to serverless:
+
+![alt text](SERVERLESS.png)
+
+
+# Serverless
+
+## Expected API Input and Output
+
+### Input Structure
+
+The API expects input provided as a JSON object with the following structure:
+
+```json
+{
+  "input": {
+    "prompt": "<user_prompt>",
+    "answerType": "<stream | normal>"
+  }
+}
+```
+
+## Output Structure
+> Note you can see more examples on my stream_client_side.py
+
+Stream Mode ("stream"): The API yields multiple JSON objects, each containing a part of the generated text:
+
+```How to call streammode on runpod:```
+
+[Documentation on stream mode invocation:](https://docs.runpod.io/serverless/endpoints/invoke-jobs#stream-results)
+
+```
+{"text": "generated text part 1"}
+{"text": "generated text part 2"}
+...
+```
+
+Normal Mode ("normal"): The API returns a single JSON object with the complete generated text:
+
+[Invoking the API with /run](https://docs.runpod.io/serverless/endpoints/invoke-jobs#asynchronous-endpoints)
+```json
+{
+  "text": "generated text"
+}
+```
+
 
 ## Supported Backends
 > The preload.py is specifically looking for backends with 'vllm' which is essentially an optimized version of the model. If you want to use a different backend, you will need to modify the preload function and handler.py as otherwise if not specified it will default to vllm usually. 
@@ -261,44 +314,5 @@ The relevant backends that support vllm you can find if it is said in the suppor
     "installation": "pip install openllm",
     "items": []
   }
-}
-```
-
-# Serverless
-
-## Expected API Input and Output
-
-### Input Structure
-
-The API expects input provided as a JSON object with the following structure:
-
-```json
-{
-  "input": {
-    "prompt": "<user_prompt>",
-    "answerType": "<stream | normal>"
-  }
-}
-```
-
-## Output Structure
-Stream Mode ("stream"): The API yields multiple JSON objects, each containing a part of the generated text:
-
-```How to call streammode on runpod:```
-
-[Documentation on stream mode invocation:](https://docs.runpod.io/serverless/endpoints/invoke-jobs#stream-results)
-
-```
-{"text": "generated text part 1"}
-{"text": "generated text part 2"}
-...
-```
-
-Normal Mode ("normal"): The API returns a single JSON object with the complete generated text:
-
-[Invoking the API with /run](https://docs.runpod.io/serverless/endpoints/invoke-jobs#asynchronous-endpoints)
-```json
-{
-  "text": "generated text"
 }
 ```
