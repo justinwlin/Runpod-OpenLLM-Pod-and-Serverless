@@ -53,9 +53,6 @@ The model's max seq len (32768) is larger than the maximum number of tokens that
 3. **Accessing Services**: Depending on the chosen mode,
     - In `serverless` and `both`, interact with the deployed model through the specified handler.
     - In `pod` and `both`, access Jupyter Lab and SSH services as provided.
-  
-### When using GPU Pod
-When using GPU Pod it often starts you up in /workspace. Just know you will need to go to '/app' is where I set the WORKDIR for all the files that come with the image. 
 
 ### Using Depot
 
@@ -94,6 +91,8 @@ Start using the container with [GPU_POD](https://runpod.io/gsc?template=pu8uaqw7
 ) (This is my runpod public URL to the template all ready to go for you.)
 
 ![alt text](GPU_POD.png)
+
+When using GPU Pod it often starts you up in /workspace. Just know you will need to go to '/app' is where I set the WORKDIR for all the files that come with the image. 
 
 If you want to deploy on serverless it's super easy! Essentially copy the template but set the environment variable for the MODE to serverless. **Check to make sure the model repository names match up** as I might update template names, or you might be using a different model.:
 
