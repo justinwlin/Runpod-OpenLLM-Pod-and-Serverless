@@ -15,11 +15,11 @@ jobs:
       matrix:
         include:
           - repository: justinwlin/mistral7b_openllm
-            model: mistralai/Mistral-7B-Instruct-v0.2
+            model: mistralai/Mistral-7B-Instruct-v0.1
             tag: latest
-          - repository: justinwlin/mixtral_8x7b_openllm
-            model: mistralai/Mixtral-8x7B-v0.1
-            tag: latest
+          # - repository: justinwlin/mixtral_8x7b_openllm
+           # model: mistralai/Mixtral-8x7B-v0.1
+            #tag: latest
           # - repository: justinwlin/llama2_13b_openllm
           #   model: NousResearch/llama-2-13b-hf
           #   tag: latest
