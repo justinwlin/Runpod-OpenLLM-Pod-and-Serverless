@@ -4,27 +4,6 @@
 
 This Docker configuration utilizes [OpenLLM](https://github.com/bentoml/OpenLLM) for both GPU and Serverless deployments on Runpod. It employs an environment variable, `MODE_TO_RUN`, to dictate the startup behavior. Depending on the `MODE_TO_RUN` value, the configuration may launch `handler.py` for serverless operations or initiate OpenSSH and Jupyter Lab for GPU pods. This adaptable setup allows for straightforward modifications to meet various deployment requirements.
 
-## Avaliable Models on CI/CD
-Llama2 70B:
-https://runpod.io/gsc?template=iw1bjna1tc&ref=wqryvm1m
-https://hub.docker.com/r/justinwlin/llama2_70b_openllm/tags
-
-Mixtral 8x7B: 
-https://runpod.io/gsc?template=od8336xqgo&ref=wqryvm1m
-https://hub.docker.com/r/justinwlin/mixtral_8x7b_openllm/tags
-
-Mistral:
-https://runpod.io/gsc?template=pu8uaqw765&ref=wqryvm1m
-https://hub.docker.com/r/justinwlin/mistral7b_openllm/tags
-
-OpenLLM Llama2 13b - Pod and Serverless Ready
-https://runpod.io/gsc?template=0dok49hohe&ref=wqryvm1m
-https://hub.docker.com/r/justinwlin/llama2_13b_openllm/tags
-
-If you use them make sure to always specify fully with the tag in Runpod `justinwlin/llama2_13b_openllm:latest`
-
-> Note! What this means is that if your model is on the CI/CD Pipeline you can use the Dockerfile_Iteration to use the base image, and just modify the handler.py to avoid redownloading the model during build time!
-
 ## Environment Variables
 
 Below is a table of the environment variables that can be passed to the Docker container. These variables enable customization of the deployment's behavior, offering flexibility for different scenarios.
