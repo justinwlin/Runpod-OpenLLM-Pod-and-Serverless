@@ -11,13 +11,13 @@ Below is a table of the environment variables that can be passed to the Docker c
 | Variable               | Description                                                                                                                  | Expected Values              | Default Value                   |
 |------------------------|------------------------------------------------------------------------------------------------------------------------------|------------------------------|---------------------------------|
 | `MODE_TO_RUN`          | Determines the container's operational mode, affecting the execution of `handler.py` and the initiation of services.         | `serverless`, `pod`, `both` | None                            |
-| `MODEL`                | Identifier for the OpenLLM model to be used. Specifies which AI model your applications will utilize.                        | Model Identifier (string)   | None                            |
+| `MODEL`                | Identifier for the OpenLLM model to be used. Specifies which AI model your applications will utilize during **BUILD STEP OF THE DOCKERFILE**                        | Model Identifier (string)   | None                            |
 | `CONCURRENCY_MODIFIER` | A factor used to adjust the concurrency level for handling requests, allowing for tuning based on workload.                  | Integer                     | `1`                             |
 | `MAX_MODEL_LEN`        | Sets the maximum sequence length the model can handle, impacting memory usage and processing capabilities.                   | Integer                     | `25000` (can be adjusted)       |
 
 ### Note on Model Identifiers
 
-To find specific model identifiers for use with OpenLLM, visit the [OpenLLM GitHub repository](https://github.com/bentoml/OpenLLM). This resource offers a comprehensive list of available models and their identifiers, which can be utilized to set the `MODEL` environment variable.
+To find specific model identifiers for use with OpenLLM, visit the [OpenLLM GitHub repository](https://github.com/bentoml/OpenLLM). This resource offers a comprehensive list of available models and their identifiers, which can be utilized to set the `MODEL` environment variable. **THIS VARIABLE IS ONLY USED DURING THE BUILD STEP OF THE DOCKERFILE**. If this changes from the build step, and the handler.py cannot find the model, it will try to download a new model which can slow down your API. So only create this discrepancy if you want to change the model during development on a GPU Pod.
 
 ### Note on `MAX_MODEL_LEN`
 
