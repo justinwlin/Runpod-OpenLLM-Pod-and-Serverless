@@ -60,7 +60,7 @@ For those using Depot to build and deploy containers, the command structure is s
 
 ```bash
 depot build -t yourusername/serverlessllm:1.0 . \
-  --build-arg MODE_TO_RUN=serverless \
+  --build-arg MODE_TO_RUN=pod \
   --build-arg MODEL=mistralai/Mistral-7B-Instruct-v0.1 \
   --build-arg CONCURRENCY_MODIFIER=1 \
   --build-arg MAX_MODEL_LEN=25000 \
@@ -71,10 +71,18 @@ depot build -t yourusername/serverlessllm:1.0 . \
 For traditional Docker builds, you can incorporate the environment variables into your build command like so:
 ```bash
 docker build -t yourusername/serverlessllm:1.0 . \
-  --build-arg MODE_TO_RUN=serverless \
+  --build-arg MODE_TO_RUN=pod \
   --build-arg MODEL=mistralai/Mistral-7B-Instruct-v0.1 \
   --build-arg CONCURRENCY_MODIFIER=1 \
   --build-arg MAX_MODEL_LEN=25000
+```
+
+## Common Use Case will just be changing out the model
+Other variables at least if you are deploying on runpod, the ENV can be changed at runpod. The only thing that really matters at build time is the `MODEL` so it might look closer to like below:
+```
+depot build -t yourusername/serverlessllm:1.0 . \
+  --build-arg MODEL=mistralai/Mistral-7B-Instruct-v0.1 \
+  --push --platform linux/amd64
 ```
 
 # Developer Experience
@@ -84,7 +92,7 @@ Start using the container with [GPU_POD](https://runpod.io/gsc?template=pu8uaqw7
 
 ![alt text](GPU_POD.png)
 
-If you want to deploy on serverless it's super easy! Essentially copy the template but set the environment variable for the MODE to serverless:
+If you want to deploy on serverless it's super easy! Essentially copy the template but set the environment variable for the MODE to serverless. **Check to make sure the model repository names match up** as I might update template names, or you might be using a different model.:
 
 ![alt text](SERVERLESS.png)
 
