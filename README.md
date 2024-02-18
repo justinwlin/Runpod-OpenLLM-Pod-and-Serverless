@@ -104,6 +104,10 @@ The methodology is:
 
 # Serverless
 
+## Example Clientside Code
+
+Click here to see the example code I wrote for 'normal' and 'stream' mode. [stream_client_side.py](./stream_client_side.py)
+
 ## Expected API Input and Output
 
 ### Input Structure
