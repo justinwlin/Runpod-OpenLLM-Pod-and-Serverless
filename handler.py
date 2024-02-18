@@ -7,9 +7,21 @@ import asyncio
 model_name = os.getenv("MODEL", "mistralai/Mistral-7B-Instruct-v0.1")
 concurrency_modifier = int(os.getenv("CONCURRENCY_MODIFIER", 1))
 mode_to_run = os.getenv("MODE_TO_RUN", "pod")
-max_model_len = int(os.getenv("MAX_MODEL_LEN", 25000))
+model_length_default = 25000
 
-llm = openllm.LLM(model_name, backend="vllm", max_model_len=max_model_len)
+print("------- ENVIRONMENT VARIABLES -------")
+print("Model name: ", model_name)
+print("Concurrency: ", concurrency_modifier)
+print("Mode running: ", mode_to_run)
+print("Model Length: ", os.getenv("MAX_MODEL_LEN"))
+print("------- -------------------- -------")
+
+try: 
+    max_model_len = int(os.getenv("MAX_MODEL_LEN", model_length_default))
+    llm = openllm.LLM(model_name, backend="vllm", max_model_len=max_model_len)
+except: 
+    llm = openllm.LLM(model_name, backend="vllm", max_model_len=model_length_default)
+
 
 async def handler(event):
     inputReq = event.get("input", {})

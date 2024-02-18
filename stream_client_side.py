@@ -1,6 +1,8 @@
 import requests
 import json
 import time
+import os
+import sys
 
 '''
 Client-side code that you can use to make requests to your deployed runpod API.
@@ -37,34 +39,63 @@ def submit_job_to_runpod(api_key, server_endpoint_id, prompt, answer_type="norma
     else:
         raise Exception(f"Runpod job submission failed: {response.text}")
 
-def stream_runpod_job_output(api_key, server_endpoint_id, job_id):
+def submit_job_and_stream_output(api_key, endpoint_id, prompt):
     """
-    Streams the output of a Runpod job in real-time.
+    Submits a job to the specified endpoint and streams the output as it becomes available.
 
     Args:
-        api_key (str): Runpod API key for authentication.
-        server_endpoint_id (str): The specific endpoint ID for the serverless function on Runpod.
-        job_id (str): The job ID to stream output for.
-
+        api_key (str): The API key for authentication.
+        endpoint_id (str): The endpoint ID for the Runpod function.
+        prompt (str): The text prompt for the serverless function to process.
     Returns:
         None: Directly prints streamed outputs to the console.
     """
-    stream_url = f"https://api.runpod.ai/v2/{server_endpoint_id}/stream/{job_id}"
+    # Submit job
+    url = f"https://api.runpod.ai/v2/{endpoint_id}/run"
     headers = {
-        "Authorization": f"Bearer {api_key}"
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
     }
-    response = requests.get(stream_url, headers=headers)
-    if response.status_code == 200:
-        data = response.json()
-        if 'stream' in data and len(data['stream']) > 0:
-            for item in data['stream']:
-                print(item['output'], end='')
-            if data.get('status') == 'COMPLETED':
-                print("\nJob completed.")
-        else:
-            print("No output available yet.")
-    else:
-        raise Exception(f"Error streaming job output: {response.text}")
+    payload = {
+        "input": {
+            "prompt": prompt,
+            "answerType": "stream"
+        }
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
+    if response.status_code != 200:
+        print(f"Error submitting job: {response.text}")
+        return
+
+    response_json = response.json()
+    task_id = response_json.get('id')
+    if not task_id:
+        print("Failed to get a job ID from the response.")
+        return
+
+    print(f"Job ID: {task_id}")
+
+    # Stream output
+    status_url = f"https://api.runpod.ai/v2/{endpoint_id}/stream/{task_id}"
+
+    try:
+        while True:  # Adjust the range or use a while loop for continuous polling
+            time.sleep(1)  # Polling interval
+            get_status = requests.get(status_url, headers=headers)
+            if get_status.status_code == 200:
+                status_response = get_status.json()
+                if 'stream' in status_response and len(status_response['stream']) > 0:
+                    for item in status_response['stream']:
+                        print(item['output']['text'], end='')  # Adjust based on the actual structure
+                if status_response.get('status') == 'COMPLETED':
+                    print("\nJob completed.")
+                    break
+            else:
+                print(f"Error streaming job output: {get_status.text}")
+                break
+    except Exception as e:
+        print(f"An error occurred while streaming output: {e}")
 
 def check_job_status(api_key, server_endpoint_id, job_id, poll=False, polling_interval=20):
     """
@@ -102,18 +133,29 @@ def check_job_status(api_key, server_endpoint_id, job_id, poll=False, polling_in
             break
 
 # Example usage
-api_key = "your_runpod_api_key"
-server_endpoint_id = "your_server_endpoint_id"
-prompt = "Describe the process of photosynthesis."
+# api_key = "XXX"
+# server_endpoint_id = "XXX"
+# prompt = "Describe the process of photosynthesis."
 
-# Submit a job to Runpod
-response = submit_job_to_runpod(api_key, server_endpoint_id, prompt, "normal")
-if 'id' in response:
-    # If the response includes a job ID, it implies an asynchronous task.
-    job_id = response['id']
-    print(f"Job ID: {job_id}")
-    # Stream the output of the job
-    stream_runpod_job_output(api_key, server_endpoint_id, job_id)
-else:
-    # For synchronous tasks, print the output directly.
-    print("Response:", response)
+# # Submit a job to Runpod by using "normal" which will return it all at once
+# response = submit_job_to_runpod(api_key, server_endpoint_id, prompt, "normal")
+# if 'id' in response:
+#     # If the response includes a job ID, it implies an asynchronous task.
+#     job_id = response['id']
+#     print(f"Job ID: {job_id}")
+#     # Stream the output of the job
+#     stream_output(api_key, server_endpoint_id, job_id)
+#     print(check_job_status(api_key, server_endpoint_id, job_id, True))
+# else:
+#     # For synchronous tasks, print the output directly.
+#     print("Response:", response)
+
+
+# Streaming example
+
+# api_key = "X"
+# server_endpoint_id = "X"
+# prompt = "Describe the process of photosynthesis."
+
+# # Submit a job to Runpod
+# response = submit_job_and_stream_output(api_key, server_endpoint_id, prompt)
