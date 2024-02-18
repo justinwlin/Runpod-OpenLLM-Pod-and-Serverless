@@ -32,7 +32,7 @@ The model's max seq len (32768) is larger than the maximum number of tokens that
 
 - `serverless`: Executes `handler.py` for serverless request handling, optimal for scalable, efficient deployments.
 - `pod`: Initiates essential services like OpenSSH and Jupyter Lab, bypassing `handler.py`, suitable for development or tasks requiring GPU resources.
-- `both`: Combines the functionalities of both modes by executing `handler.py` and initiating essential services, ideal for debugging serverless deployments with additional tool access because you can set a minimum active worker to 1 and then essentially just use Jupyter Notebook / SSH to debug the worker.
+- `both`: Combines the functionalities of both modes by executing `handler.py` and initiating essential services, ideal for debugging serverless deployments with additional tool access because you can set a minimum active worker to 1 and then essentially just use Jupyter Notebook / SSH to debug the worker. **(Note: this both behavior might no longer be supported by Runpod b/c they don't let us currently specify HTTP / TCP ports on worker templates anymore.)**
 
 ## Getting Started
 
@@ -88,6 +88,19 @@ If you want to deploy on serverless it's super easy! Essentially copy the templa
 
 ![alt text](SERVERLESS.png)
 
+If you end up wanting to change the handler.py I recommend to build using a flag to target the "Dockerfile_Iteration" this way you can have the models precached during the docker build process and only update the handler.py. This way you can avoid the long wait time to "redownload the model" and just update the handler.py.
+
+```sh
+docker build -f Dockerfile_Iteration -t your_image_name .
+```
+
+## Overall Methodology:
+The methodology is:
+1. Build your first Dockerfile where we preload the model + everything the first time
+2. Launch a GPU Pod on Runpod and test the handler.py
+  -- If everything looks good, just use the same image for serverless and modify the env variable to change how it starts up
+  -- If you need to iterate, iterate on Runpod and then copy and paste the handler.py back locally and then build using the Docker_Iteration file, which means you won't have to redownload the whole model again and instead just keep iterating on handler.py
+3. Once ready, then relaunch back on GPU Pod and Serverless until ready.
 
 # Serverless
 

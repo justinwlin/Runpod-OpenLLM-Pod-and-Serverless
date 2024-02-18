@@ -1,0 +1,6 @@
+# Replace this with your own if different
+FROM justinwlin/serverlessllm:latest
+
+WORKDIR /app
+
+COPY handler.py .
