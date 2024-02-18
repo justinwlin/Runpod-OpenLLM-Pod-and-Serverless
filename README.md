@@ -88,7 +88,7 @@ If you want to deploy on serverless it's super easy! Essentially copy the templa
 
 ![alt text](SERVERLESS.png)
 
-If you end up wanting to change the handler.py I recommend to build using a flag to target the "Dockerfile_Iteration" this way you can have the models precached during the docker build process and only update the handler.py. This way you can avoid the long wait time to "redownload the model" and just update the handler.py.
+If you end up wanting to change the handler.py I recommend to build using a flag to target the "Dockerfile_Iteration" after you build using the standard "Dockerfile" once. This way you can have the models cached during the docker build process in the base image and only update the handler.py. This way you can avoid the long wait time to "redownload the model" and just update the handler.py.
 
 ```sh
 docker build -f Dockerfile_Iteration -t your_image_name .
