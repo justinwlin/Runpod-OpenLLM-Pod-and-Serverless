@@ -55,6 +55,12 @@ An ex. error might look like:
 ```
 The model's max seq len (32768) is larger than the maximum number of tokens that can be stored in KV cache (27296). Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
 ```
+Or:
+```
+ValueError: User-specified max_model_len (25000) is greater than the derived max_model_len (None=4096 in model's config.json). This may lead to incorrect model outputs or CUDA errors. Make sure the value is correct and within the model context size.
+```
+
+If this is this is the case either adjust the handler.py with a hard-coded value, or set the ENV variable to a lower value. I cannot test every model's max_length so this is something if you see as an error just adjust manually. 
 
 ### Mode Descriptions
 
