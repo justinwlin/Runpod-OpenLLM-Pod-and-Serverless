@@ -4,6 +4,34 @@
 
 This Docker configuration utilizes [OpenLLM](https://github.com/bentoml/OpenLLM) for both GPU and Serverless deployments on Runpod. It employs an environment variable, `MODE_TO_RUN`, to dictate the startup behavior. Depending on the `MODE_TO_RUN` value, the configuration may launch `handler.py` for serverless operations or initiate OpenSSH and Jupyter Lab for GPU pods. This adaptable setup allows for straightforward modifications to meet various deployment requirements.
 
+## CI/CD Pipeline is Setup for what I thought might be Popular Images 
+> Note some of these like 70B and Mixtral are inherently super large. So I recommend mistral / llamab13b for serverless, or to look into network volumes yourself if you want to use larger models. But network volumes is not a usecase I am personally interested to test as there is large latency to load such large models from a network volume anyways into VRAM.
+
+> Also, with these base files, it means you can use the Dockerfile_Iteration to just update the handler.py and not have to redownload the model again. You can also modify the Docker_Iteration file to add more dependency and whatever else you want, knowing you have a stable base image to work off of and not have to preload such large models yourself.
+
+**OpenLLM Llama2 70B - GPU Pod and Serverless Ready**
+
+https://runpod.io/gsc?template=iw1bjna1tc&ref=wqryvm1m
+
+https://hub.docker.com/layers/justinwlin/llama2_70b_openllm/latest/images/sha256-c481f8dd51481daf995bfbe7075ee44bf0e1dc680cbda767cc97fcb7fd83f5a4?context=repo
+
+**OpenLLM Llama2 13b - Pod and Serverless Ready**
+https://runpod.io/gsc?template=0dok49hohe&ref=wqryvm1m
+
+https://hub.docker.com/layers/justinwlin/llama2_13b_openllm/latest/images/sha256-35db577b8aea20dde856de69310a44703dbd9473f960cb0c17a71d90c72acb93?context=repo
+
+**OpenLLM Mixtral 8x7B - Pod and Serverless Ready**
+https://runpod.io/gsc?template=od8336xqgo&ref=wqryvm1m
+
+https://hub.docker.com/layers/justinwlin/mixtral_8x7b_openllm/latest/images/sha256-733305b4886892d122da074d25c10b622bf88918e6afea77aefd656a2ea8ef3c?context=repo
+
+
+**OpenLLM Mistral 7B - GPU Pod and Serverless Ready**
+https://runpod.io/gsc?template=pu8uaqw765&ref=wqryvm1m
+
+https://hub.docker.com/layers/justinwlin/mistral7b_openllm/latest/images/sha256-47f901971ee95cd0d762fe244c4dd625a8bf7a0e0142e5bbd91ee76f61c8b6ef?context=repo
+
+
 ## Environment Variables
 
 Below is a table of the environment variables that can be passed to the Docker container. These variables enable customization of the deployment's behavior, offering flexibility for different scenarios.
