@@ -11,25 +11,28 @@ This Docker configuration utilizes [OpenLLM](https://github.com/bentoml/OpenLLM)
 
 **OpenLLM Llama2 70B - GPU Pod and Serverless Ready**
 
-https://runpod.io/gsc?template=iw1bjna1tc&ref=wqryvm1m
+[Runpod](https://runpod.io/gsc?template=iw1bjna1tc&ref=wqryvm1m)
 
-https://hub.docker.com/layers/justinwlin/llama2_70b_openllm/latest/images/sha256-c481f8dd51481daf995bfbe7075ee44bf0e1dc680cbda767cc97fcb7fd83f5a4?context=repo
+[Dockerhub](https://hub.docker.com/layers/justinwlin/llama2_70b_openllm/latest/images/sha256-c481f8dd51481daf995bfbe7075ee44bf0e1dc680cbda767cc97fcb7fd83f5a4?context=repo)
 
 **OpenLLM Llama2 13b - Pod and Serverless Ready**
-https://runpod.io/gsc?template=0dok49hohe&ref=wqryvm1m
 
-https://hub.docker.com/layers/justinwlin/llama2_13b_openllm/latest/images/sha256-35db577b8aea20dde856de69310a44703dbd9473f960cb0c17a71d90c72acb93?context=repo
+[Runpod](https://runpod.io/gsc?template=0dok49hohe&ref=wqryvm1m)
+
+[Dockerhub](https://hub.docker.com/layers/justinwlin/llama2_13b_openllm/latest/images/sha256-35db577b8aea20dde856de69310a44703dbd9473f960cb0c17a71d90c72acb93?context=repo)
 
 **OpenLLM Mixtral 8x7B - Pod and Serverless Ready**
-https://runpod.io/gsc?template=od8336xqgo&ref=wqryvm1m
 
-https://hub.docker.com/layers/justinwlin/mixtral_8x7b_openllm/latest/images/sha256-733305b4886892d122da074d25c10b622bf88918e6afea77aefd656a2ea8ef3c?context=repo
+[Runpod](https://runpod.io/gsc?template=od8336xqgo&ref=wqryvm1m)
+
+[Dockerhub](https://hub.docker.com/layers/justinwlin/mixtral_8x7b_openllm/latest/images/sha256-733305b4886892d122da074d25c10b622bf88918e6afea77aefd656a2ea8ef3c?context=repo)
 
 
 **OpenLLM Mistral 7B - GPU Pod and Serverless Ready**
-https://runpod.io/gsc?template=pu8uaqw765&ref=wqryvm1m
 
-https://hub.docker.com/layers/justinwlin/mistral7b_openllm/latest/images/sha256-47f901971ee95cd0d762fe244c4dd625a8bf7a0e0142e5bbd91ee76f61c8b6ef?context=repo
+[Runpod](https://runpod.io/gsc?template=pu8uaqw765&ref=wqryvm1m)
+
+[Dockerhub](https://hub.docker.com/layers/justinwlin/mistral7b_openllm/latest/images/sha256-47f901971ee95cd0d762fe244c4dd625a8bf7a0e0142e5bbd91ee76f61c8b6ef?context=repo)
 
 
 ## Environment Variables
