@@ -1,4 +1,4 @@
-# Docker Configuration for OpenLLM with Runpod
+# OpenLLM with Runpod
 
 ## Summary
 
