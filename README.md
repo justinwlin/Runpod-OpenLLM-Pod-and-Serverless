@@ -141,7 +141,7 @@ Start using the container with [GPU_POD](https://runpod.io/gsc?template=pu8uaqw7
 
 ![alt text](GPU_POD.png)
 
-If you want to deploy on serverless it's super easy! Essentially copy the template but set the environment variable for the MODE to serverless. **Check to make sure the model repository names match up** as I might update template names, or you might be using a different model.:
+If you want to deploy on serverless it's super easy! Essentially copy the template but set the environment variable for the MODE to serverless. **Check to make sure the model repository names match up** as I might update template names, or you might be using a different model. Find the right one by refering to Docker which model you want to use. **MAKE SURE TO INCLUDE THE USERNAME/IMAGE:TAG** if you are missing the username, image, or tag it won't work!!:
 
 ![alt text](SERVERLESS.png)
 
