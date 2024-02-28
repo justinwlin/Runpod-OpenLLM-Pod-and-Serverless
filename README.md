@@ -145,9 +145,12 @@ If you want to deploy on serverless it's super easy! Essentially copy the templa
 
 Adjust the `MAX_MODEL_LEN` depending on what you are running. For ex. what I show in the picture works for Mistral, but maybe not for Llama which uses 4096. You can probably test in GPU Pod to see if you get any errors if using a model that I haven't tested.
 
+For the container size, look at the compressed docker image size on Dockerhub, and I generally like to add another 5GB to 10GB ontop of that. You can play around to see. 
+
 ![alt text](SERVERLESS.png)
 
 If you end up wanting to change the handler.py I recommend to build using a flag to target the "Dockerfile_Iteration" after you build using the standard "Dockerfile" once. This way you can have the models cached during the docker build process in the base image and only update the handler.py. This way you can avoid the long wait time to "redownload the model" and just update the handler.py.
+
 
 ```sh
 docker build -f Dockerfile_Iteration -t your_image_name .
