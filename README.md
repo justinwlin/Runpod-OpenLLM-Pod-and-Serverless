@@ -12,11 +12,15 @@ This Docker configuration utilizes [OpenLLM](https://github.com/bentoml/OpenLLM)
 ## Recommended:
 **OpenLLM Mistral 7B - GPU Pod and Serverless Ready**
 
+(What I personally work with, and confirmed working)
+
 [Runpod](https://runpod.io/gsc?template=pu8uaqw765&ref=wqryvm1m)
 
 [Dockerhub](https://hub.docker.com/layers/justinwlin/mistral7b_openllm/latest/images/sha256-47f901971ee95cd0d762fe244c4dd625a8bf7a0e0142e5bbd91ee76f61c8b6ef?context=repo)
 
 **OpenLLM Llama2 13b - Pod and Serverless Ready**
+
+(Confirmed working, had to change the MAX_MODEL_LEN ENV variable to 4096 in the Runpod template)
 
 [Runpod](https://runpod.io/gsc?template=0dok49hohe&ref=wqryvm1m)
 
